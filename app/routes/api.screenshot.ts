@@ -1,4 +1,3 @@
-import { log } from "console";
 import type { ActionFunctionArgs } from "react-router";
 
 type Viewport = {
@@ -80,7 +79,6 @@ export async function action({ request }: ActionFunctionArgs) {
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: true,
   });
-  console.log("browser launched");
 
   try {
     const context = await browser.newContext({
