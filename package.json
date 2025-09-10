@@ -2,6 +2,8 @@
   "name": "page-diff-viewer",
   "private": true,
   "type": "module",
+  "author": "Marco",
+  "license": "MIT",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",

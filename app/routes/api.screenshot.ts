@@ -176,5 +176,3 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export const loader = () => new Response("Method Not Allowed", { status: 405 });
-
-
