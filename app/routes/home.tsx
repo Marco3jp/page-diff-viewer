@@ -80,9 +80,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto max-w-7xl p-6 space-y-6">
-      <h1 className="text-2xl font-semibold">Page Diff Viewer</h1>
-
+    <main className="mx-auto max-w-7xl p-4 space-y-6">
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="grid gap-3">
           <label className="block">
