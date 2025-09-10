@@ -19,7 +19,7 @@ type ApiResponse = {
 export default function Home() {
   const [urlA, setUrlA] = useState("");
   const [urlB, setUrlB] = useState("");
-  const [fullPage, setFullPage] = useState(false);
+  const [fullPage, setFullPage] = useState(true);
   const [waitSelector, setWaitSelector] = useState("");
   const [waitMs, setWaitMs] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
@@ -115,29 +115,31 @@ export default function Home() {
             />
             <span>フルページで撮影</span>
           </label>
-          <label className="block">
-            <span className="text-sm text-gray-600">待機CSSセレクタ（任意）</span>
-            <input
-              type="text"
-              placeholder="#app .ready"
-              value={waitSelector}
-              onChange={(e) => setWaitSelector(e.target.value)}
-              className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring"
-            />
-          </label>
-          <label className="block">
-            <span className="text-sm text-gray-600">追加待機時間ms（任意, 最大15000）</span>
-            <input
-              type="number"
-              min={0}
-              max={15000}
-              step={100}
-              placeholder="1000"
-              value={waitMs}
-              onChange={(e) => setWaitMs(e.target.value === "" ? "" : Number(e.target.value))}
-              className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring"
-            />
-          </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <label className="block">
+              <span className="text-sm text-gray-600">待機CSSセレクタ（任意）</span>
+              <input
+                type="text"
+                placeholder="#app .ready"
+                value={waitSelector}
+                onChange={(e) => setWaitSelector(e.target.value)}
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring"
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm text-gray-600">追加待機時間ms（任意, 最大15000）</span>
+              <input
+                type="number"
+                min={0}
+                max={15000}
+                step={100}
+                placeholder="1000"
+                value={waitMs}
+                onChange={(e) => setWaitMs(e.target.value === "" ? "" : Number(e.target.value))}
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring"
+              />
+            </label>
+          </div>
         </div>
         <button
           type="submit"
@@ -155,7 +157,7 @@ export default function Home() {
       )}
 
       {(imgA || imgB || imgDiff) && (
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="relative left-1/2 right-1/2 -mx-[50vw] w-screen grid grid-cols-1 md:grid-cols-3 gap-6 px-6">
           <div>
             <h2 className="mb-2 font-medium">Screenshot A</h2>
             {imgA ? (
