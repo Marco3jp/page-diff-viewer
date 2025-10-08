@@ -22,6 +22,8 @@ export default function Home() {
   const [fullPage, setFullPage] = useState(true);
   const [waitSelector, setWaitSelector] = useState("");
   const [waitMs, setWaitMs] = useState<number | "">("");
+  const [basicAuthA, setBasicAuthA] = useState({ username: "", password: "" });
+  const [basicAuthB, setBasicAuthB] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imgA, setImgA] = useState<string | null>(null);
@@ -62,6 +64,8 @@ export default function Home() {
           diff: { enable: true, threshold: 0.1, includeAA: true, alpha: 255 },
           waitSelector: waitSelector || undefined,
           waitMs: typeof waitMs === "number" ? waitMs : undefined,
+          basicAuthA: basicAuthA.username ? basicAuthA : undefined,
+          basicAuthB: basicAuthB.username ? basicAuthB : undefined,
         }),
       });
       const data = (await res.json()) as ApiResponse;
@@ -94,6 +98,28 @@ export default function Home() {
               className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring"
             />
           </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-4">
+            <label className="block">
+              <span className="text-xs text-gray-500">Basic認証 ユーザー名 (URL A用, 任意)</span>
+              <input
+                type="text"
+                placeholder="username"
+                value={basicAuthA.username}
+                onChange={(e) => setBasicAuthA({ ...basicAuthA, username: e.target.value })}
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring text-sm"
+              />
+            </label>
+            <label className="block">
+              <span className="text-xs text-gray-500">Basic認証 パスワード (URL A用, 任意)</span>
+              <input
+                type="password"
+                placeholder="password"
+                value={basicAuthA.password}
+                onChange={(e) => setBasicAuthA({ ...basicAuthA, password: e.target.value })}
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring text-sm"
+              />
+            </label>
+          </div>
           <label className="block">
             <span className="text-sm text-gray-600">URL B</span>
             <input
@@ -105,6 +131,28 @@ export default function Home() {
               className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring"
             />
           </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-4">
+            <label className="block">
+              <span className="text-xs text-gray-500">Basic認証 ユーザー名 (URL B用, 任意)</span>
+              <input
+                type="text"
+                placeholder="username"
+                value={basicAuthB.username}
+                onChange={(e) => setBasicAuthB({ ...basicAuthB, username: e.target.value })}
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring text-sm"
+              />
+            </label>
+            <label className="block">
+              <span className="text-xs text-gray-500">Basic認証 パスワード (URL B用, 任意)</span>
+              <input
+                type="password"
+                placeholder="password"
+                value={basicAuthB.password}
+                onChange={(e) => setBasicAuthB({ ...basicAuthB, password: e.target.value })}
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring text-sm"
+              />
+            </label>
+          </div>
           <label className="inline-flex items-center gap-2">
             <input
               type="checkbox"

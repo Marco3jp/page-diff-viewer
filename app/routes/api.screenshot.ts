@@ -13,6 +13,11 @@ type DiffOptions = {
   alpha?: number; // 0..255
 };
 
+type BasicAuth = {
+  username: string;
+  password: string;
+};
+
 type ScreenshotRequestBody = {
   urlA: string;
   urlB: string;
@@ -22,6 +27,8 @@ type ScreenshotRequestBody = {
   diff?: DiffOptions;
   waitSelector?: string; // optional CSS selector to wait for
   waitMs?: number; // additional wait in ms
+  basicAuthA?: BasicAuth; // Basic auth for URL A
+  basicAuthB?: BasicAuth; // Basic auth for URL B
 };
 
 function isValidHttpUrl(value: string): boolean {
@@ -90,9 +97,16 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     // Helper to capture a screenshot for a given URL
-    const capture = async (url: string): Promise<Buffer> => {
+    const capture = async (url: string, basicAuth?: BasicAuth): Promise<Buffer> => {
       const page = await context.newPage();
       try {
+        // Set Basic Authentication header if provided
+        if (basicAuth?.username && basicAuth?.password) {
+          const credentials = Buffer.from(`${basicAuth.username}:${basicAuth.password}`).toString("base64");
+          await page.setExtraHTTPHeaders({
+            Authorization: `Basic ${credentials}`,
+          });
+        }
         await page.goto(url, { waitUntil: "load", timeout: timeoutMs });
         if (body?.waitSelector) {
           try { await page.waitForSelector(body.waitSelector, { timeout: Math.min(timeoutMs, 15000) }); } catch {}
@@ -107,7 +121,10 @@ export async function action({ request }: ActionFunctionArgs) {
       }
     };
 
-    const [bufA, bufB] = await Promise.all([capture(urlA), capture(urlB)]);
+    const [bufA, bufB] = await Promise.all([
+      capture(urlA, body?.basicAuthA),
+      capture(urlB, body?.basicAuthB),
+    ]);
 
     let diffBase64: string | null = null;
     if (diffOptions.enable) {
