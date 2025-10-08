@@ -21,7 +21,7 @@ export default function Home() {
   const [urlB, setUrlB] = useState("");
   const [fullPage, setFullPage] = useState(true);
   const [waitSelector, setWaitSelector] = useState("");
-  const [waitMs, setWaitMs] = useState<number | "">("");
+  const [waitMs, setWaitMs] = useState<number | "">(5000);
   const [basicAuthA, setBasicAuthA] = useState({ username: "", password: "" });
   const [basicAuthB, setBasicAuthB] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
