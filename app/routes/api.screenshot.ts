@@ -29,6 +29,7 @@ type ScreenshotRequestBody = {
   waitMs?: number; // additional wait in ms
   basicAuthA?: BasicAuth; // Basic auth for URL A
   basicAuthB?: BasicAuth; // Basic auth for URL B
+  removeSelectors?: string[]; // CSS selectors for elements to remove from DOM before screenshot
 };
 
 function isValidHttpUrl(value: string): boolean {
@@ -134,7 +135,20 @@ export async function action({ request }: ActionFunctionArgs) {
           });
         });
 
-        const buf = await page.screenshot({ type: "png", fullPage });
+        // Remove specified elements from DOM before screenshot
+        if (body?.removeSelectors?.length) {
+          await page.evaluate((selectors) => {
+            selectors.forEach(selector => {
+              const elements = document.querySelectorAll(selector);
+              elements.forEach(el => el.remove());
+            });
+          }, body.removeSelectors);
+        }
+
+        const buf = await page.screenshot({
+          type: "png",
+          fullPage
+        });
         return Buffer.isBuffer(buf) ? buf : Buffer.from(buf);
       } finally {
         await page.close({ runBeforeUnload: true });
