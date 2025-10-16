@@ -114,6 +114,26 @@ export async function action({ request }: ActionFunctionArgs) {
         if (typeof body?.waitMs === "number" && body.waitMs > 0) {
           await page.waitForTimeout(Math.min(body.waitMs, 15000));
         }
+
+        // Scroll to bottom to load lazy-loaded images
+        await page.evaluate(async () => {
+          await new Promise<void>((resolve) => {
+            let totalHeight = 0;
+            const distance = 100; // Distance to scroll each step
+            const timer = setInterval(() => {
+              const scrollHeight = document.body.scrollHeight;
+              window.scrollBy(0, distance);
+              totalHeight += distance;
+
+              if (totalHeight >= scrollHeight) {
+                clearInterval(timer);
+                // Wait for last images to load
+                setTimeout(() => resolve(), 1000);
+              }
+            }, 100); // Scroll every 100ms
+          });
+        });
+
         const buf = await page.screenshot({ type: "png", fullPage });
         return Buffer.isBuffer(buf) ? buf : Buffer.from(buf);
       } finally {
