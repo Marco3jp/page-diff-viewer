@@ -143,6 +143,8 @@ export async function action({ request }: ActionFunctionArgs) {
               elements.forEach(el => el.remove());
             });
           }, body.removeSelectors);
+          // Wait for animations/transitions after element removal
+          await page.waitForTimeout(2500);
         }
 
         const buf = await page.screenshot({
